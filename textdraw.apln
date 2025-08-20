@@ -121,16 +121,21 @@
     _hbar←_bar_ hlevels
     _vbar←{⍺←⊢ ⋄ ⊃⍣(⍬≡⍴⍵)⊖∘⍉¨⍺(⍺⍺ _bar_ vlevels)⍵}
     vbar←{
+        ⍺←⊢ ⋄ n←⊃⌽s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 4>≢⍺:⍺ scale ⍵ ⋄ ⍺}0,⍵
+        y←(2↑s){⍵ scale⍨⍺,1,(n-1)×≢vlevels}⍵
+        ⊃,/(¯0.5(n-0.5)×≢vlevels)(n _vbar)y
+    }
+    hbar←{
+        ⍺←⊢ ⋄ n←⊃⌽s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 4>≢⍺:⍺ scale ⍵ ⋄ ⍺}0,⍵
+        x←(2↑s){⍵ scale⍨⍺,1,(n-1)×≢hlevels}⍵
+        ⊃⍪/(¯0.5(n-0.5)×≢hlevels)(n _hbar)x
+    }
+    barplot←{
         ⍺←⊢ ⋄ n←⊃⌽⊃s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 2>≡⍺:⍺ scale ⍵ ⋄ ⍺}⍵
         y x←s scale ⍵ ⋄ y←⎕IO-⍨(2↑⊃s){⍵ scale⍨⍺,1,(n-1)×≢vlevels}⊃⍵
         (⊃⌽⊃⌽s)↑[⎕IO+1]⍉↑,¨(¯0.5(n-0.5)×≢vlevels)(n _vbar)x⌈⌿⍤⊢⌸y
     }
-    hbar←{
-        ⍺←⊢ ⋄ n←⊃⌽s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 4>≢⍺:⍺ scale ⍵ ⋄ ⍺}⍵
-        x←(2↑s){⍵ scale⍨⍺,1,(n-1)×≢hlevels}⍵
-        ⊃⍪/(¯0.5(n-0.5)×≢hlevels)(n _hbar)x
-    }
-
+        
     ⍝ plotting
     _bg←{
         ⍺←⊢ ⋄ 3>≡⍵:∇⊂⍺ scale ⍵
@@ -156,13 +161,14 @@
         p←↓_fill⍣(∧/(⊃∘⌽¨m)∊shades)D white⊂s
         p _ontop ⍵⍵ _bg⊂s
     }
-    _plot←{⍺←⊢ ⋄ s←⍺ scale ⍵ ⋄ (s vbar ⍵)_ontop ⍺⍺ _bg⊂s}
+    _plot←{⍺←⊢ ⋄ s←⍺ scale ⍵ ⋄ (s barplot ⍵)_ontop ⍺⍺ _bg⊂s}
     _histogram←{
         ⍺←50 ⋄ 2>≢⍺:(⍺,⍨⌊⍺×7÷16)∇ ⍵
         y x←⍵ ⋄ w←2×1⌈⌊(⊃⌽⍺)÷2×≢y
         sx←(⌊/,⌈/,∘(⊢,1+w×⊢)1-⍨≢)x
         sy←(⊃⍺)scale 0,y
-        (⊃,/' ',⍨¨(w-1)/¨(⊃⌽sy)_vbar y)_ontop' '@(''''∘=)⍺⍺ _bg⊂sy sx
+        p←⊃,/' ',⍨¨(w-1)/¨⍪¨↓⍉sy vbar y
+        p _ontop' '@(''''∘=)⍺⍺ _bg⊂sy sx
     }
     _map←{p←⍺⍺ ⍵ ⋄ 0=⎕NC'⍺':p ⋄ ⍺←(⌊/,⌈/,1,≢)∘⍳¨⍴⍵ ⋄ ⍺(⊣labels ruler)p}
     plot←{
