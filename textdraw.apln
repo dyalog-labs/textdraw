@@ -16,8 +16,8 @@
 
     ⍝ block drawing
     blocks←' ▄▀█'
-    ⍝ blocks2←' ','▗','▖','▄','▝','▐','▞','▟','▘','▚','▌','▙','▀','▜','▛','█'
-    ⍝ braille←⎕UCS(0,⍳255)+⎕UCS'⠀'
+    blocks2←' ','▗','▖','▄','▝','▐','▞','▟','▘','▚','▌','▙','▀','▜','▛','█'
+    braille←⎕UCS(0,⍳255)+⎕UCS'⠀'
     
     ⍝ scaling of coordinates
     nice←{
@@ -235,14 +235,24 @@
     }
     
     ⍝ block drawing
+    tesselate←{⊂[2×⍳k](,s,⍪r)⍴⍵↑⍨r×s←⌈R÷r←1+(-k←≢R←⍴⍵)↑⍺-1} ⍝ aplcart
     _block_←{
-        tesselate←{⊂[2×⍳k](,s,⍪r)⍴⍵↑⍨r×s←⌈R÷r←1+(-k←≢R←⍴⍵)↑⍺-1} ⍝ aplcart
         0=⎕NC'⍺':⍺⍺[⎕IO+2⊥∘,¨2 1 tesselate ⍵] ⋄ 0>⍺:(|⍺)∇⌽⍵ ⋄ 1=⍺:∇ ⍵
         u d←60{(⊢÷∨/)(⌊0.5+⍵×⍺)⍺}⍺ ⋄ g←u{⍺⌿⍺/⍵}⍣(u>1)⊢⍵ ⋄ 1=d:∇ g
         ((⌊/,⌈/)⍤∊⍵⍵ _fill⊢)+/∘∊¨(|(d×2)d)tesselate g
     }
     block←blocks _block_ shades
     shaded←shades _block_ shades
+    zoom←{
+        ⍺←2 ⋄ 1=⍺:⍵ ⋄ 0>⍺:(|⍺)∇⌽⍵
+        u d←60{(⊢÷∨/)(⌊0.5+⍵×⍺)⍺}⍺ ⋄ g←u{⍺⌿⍺/⍵}⍣(u>1)⊢⍵ ⋄ 1=d:g
+        (⊢>2÷⍨⌈/∘∊)+/∘∊¨(|d d)tesselate g
+    }
+    dotted←{
+        ⍺←1 ⋄ v←¯2(↑,⍨∘,∘⍉2 3⍴↓)2*⎕IO-⍨⍳8
+        braille[⎕IO+(v+.×,)¨4 2 tesselate ⍺ zoom ⍵]
+    }
+
 
     ⍝ https://www.dyalog.com/the-dyalog-duck.htm
     duck←24 40⍴⊃,/≢⍛⍴∘0 1⍛(/¨⍨)⊃,/(
