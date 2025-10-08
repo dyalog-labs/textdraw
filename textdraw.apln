@@ -46,7 +46,7 @@
         {⊃{⍺@(⊂1 1)⌽⍉⍵}/'┌┐┘└',{⍺⍪⌽⍉⍵}/'─│─│',⊂⍕⍵}⍵  ⍝ aplcart
     }
     _rect←{
-        ⍺←⊢ ⋄ 2<≡⍵:(⌊t÷⍨n-1)∇ n⊣t n←2↓↓⍉↑⊃⍵ 
+        ⍺←⊢ ⋄ 2<≡⍵:(⍺⊣⌊t÷⍨n-1)∇ n⊣t n←2↓↓⍉↑⊃⍵ 
         1<≡⍵:∇⊃∘⌽¨⍺ scale ⍵ ⋄ 3≠⎕NC'⍺':(⍺⍴⍺⍺)∇∇⍵
         ⍬≡⍴⍺⍺:⍵⍴⍺⍺ ⋄ ⍵↑⊃⍪⌿,/(⌈⍵÷⍴a)⍴⊂a←⍉∘⍪⍣(2>≢⍴⍺⍺)⊢⍺⍺
     }
@@ -58,7 +58,7 @@
     }
     grid←'┼'_grid_'─│' ⋄ dgrid←dot _grid_'' ⋄ dotgrid←dot _grid_ dot
     white←' '_rect ⋄ light←'░'_rect ⋄ dark←'▓'_rect ⋄ black←'█'_rect
-    dots←dot _rect ⋄ dots2←(2↑dot)_rect ⋄ hdots←(2 2⍴4↑2⍴dot)_rect
+    dots←dot _rect ⋄ dots2←2 2∘((2↑dot)_rect) ⋄ hdots←2 2∘((4↑2⍴dot)_rect)
     lines←' ▏'_rect
 
     ⍝ layers
@@ -117,21 +117,20 @@
     _hbar←_bar_ hlevels
     _vbar←{⍺←⊢ ⋄ ⊃⍣(⍬≡⍴⍵)⊖∘⍉¨⍺(⍺⍺ _bar_ vlevels)⍵}
     hbar←{
-        ⍺←⊢ ⋄ n←⊃⌽s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 4>≢⍺:⍺ scale ⍵ ⋄ ⍺}0,⍵
-        x←(2↑s){⍵ scale⍨⍺,1,(n-1)×≢hlevels}⍵
-        ⊃⍪/(¯0.5(n-0.5)×≢hlevels)(n _hbar)x
+        ⍺←⊢ ⋄ s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 4>≢⍺:⍺ scale ⍵ ⋄ ⍺}⍵
+        ⊃⍪/((2↑s)+¯1 1×((-/⌽2↑s)÷1-⍨⊃⌽s)÷2)((⊃⌽s)_hbar)⍵
     }
     vbar←{
-        ⍺←⊢ ⋄ n←⊃⌽s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 4>≢⍺:⍺ scale ⍵ ⋄ ⍺}0,⍵
-        y←(2↑s){⍵ scale⍨⍺,1,(n-1)×≢vlevels}⍵
-        ⊃,/(¯0.5(n-0.5)×≢vlevels)(n _vbar)y
+        ⍺←⊢ ⋄ s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 4>≢⍺:⍺ scale ⍵ ⋄ ⍺}⍵
+        ⊃,/((2↑s)+¯1 1×((-/⌽2↑s)÷1-⍨⊃⌽s)÷2)((⊃⌽s)_vbar)⍵
     }
     barplot←{
         ⍺←⊢ ⋄ n←⊃⌽⊃s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 2>≡⍺:⍺ scale ⍵ ⋄ ⍺}⍵
-        y x←s scale ⍵ ⋄ y←⎕IO-⍨(2↑⊃s){⍵ scale⍨⍺,1,(n-1)×≢vlevels}⊃⍵
-        (⊃⌽⊃⌽s)↑[⎕IO+1]⍉↑,¨(¯0.5(n-0.5)×≢vlevels)(n _vbar)⊃⌈⌿⍤⊢⌸/⌽line y x
+        y x←s scale ⍵ ⋄ y←(2↑⊃s){⍵ scale⍨⍺,1,(n-1)×≢vlevels}⊃⍵
+        l h←(⌊/,⌈/)y←((¯1↑⊃),⍨(1↑⊃),∘{⊃⌈⌿⍤⊢⌸/⌽⍵}¯1↓¨1↓¨⊢)line y x
+        (⊃⌽⊃⌽s)↑[⎕IO+1]⊃,/(l h+¯1 1×((h-l)÷n-1)÷2)(n _vbar)y
     }
-        
+    
     ⍝ ticks
     _ticks_←{t n←2↓⍵ ⋄ ⍺←⌊(n-1)÷t ⋄ ⍺⍺,⍨(n-1)⍴⍺⍺,(⍺-1)⍴⍵⍵}
     ⍝ rulers
@@ -188,6 +187,10 @@
         p _ontop ⍵⍵ _bg⊂s
     }
     _plot←{⍺←⊢ ⋄ s←⍺ scale ⍵ ⋄ (s barplot ⍵)_ontop ⍺⍺ _bg⊂s}
+    _series←{
+        ⍺←12 ⋄ s←⍺{0=⎕NC'⍺':scale ⍵ ⋄ 4>≢⍺:⍺ scale ⍵ ⋄ ⍺}⍵
+        (s vbar ⍵)_ontop(-⌊(⍺⍺-⎕IO)÷3)↓⍺⍺ _bg⊂s((⎕IO+0(≢⍵)),1,≢⍵)
+    }
     _hbars←{
         ⍺←⊢ ⋄ names x←⍵ ⋄ s←⍺ scale x
         bg←(|⍺⍺){
@@ -217,6 +220,7 @@
     _map←{p←⍺⍺ ⍵ ⋄ 0=⎕NC'⍺':p ⋄ ⍺←(⌊/,⌈/,1,≢)∘⍳¨⍴⍵ ⋄ ⍺(⊣label ruler)p}
     plot←{
         ⍺←⊢ ⋄ s←6+⎕IO
+        (1=≡⍵)∧2>≢⍴⍵:⍺(s _series)⍵
         0=80|⎕DR⊃⊃⍵:⍺(s _hbars)⍵
         2<≡⍵:⍺(((≢⍵)⍴2⍴¨⌽2↓shades1)_plot_ s)⍵
         2=≢⍴⍵:⍺ shade1 _map ⍵
