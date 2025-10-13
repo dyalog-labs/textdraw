@@ -1,0 +1,26 @@
+ plot←{
+     N←{9.1=42 ⎕ATX'⍵'}
+     A←{
+         2=≢⍴⍵:⍵
+         ~(N ⍵)∨(1=≡⍵)∧∧/N¨⍵:⍵
+         s←{
+             t←⍵ ⎕VGET(⊂'type' 'scatter')
+             (⊂'name')∊⍵.⎕NL-2:t ⍵.(name y x)
+             t({0::⍵.y ⋄ ⍵.(y x)}⍵)
+         }¨⍵
+         1<≢t←∪⊃¨s:⎕SIGNAL 6 ⋄ t←⊃t ⋄ s←⊃∘⌽¨s
+         ('bar'≡t)∧~0∊80|⎕DR¨s:⎕SIGNAL 11
+         1=≢s:⊃s
+         1=≢x←∪⊃∘⌽¨s:(⊂⍣⍺{⊃⍣(2=≢⍵)⊢¯1↓⍵}¨s),x
+         1=≢y←∪¯2⊃⍤↑¨s:y,(⊂⍣⍺{2=≢⍵:⊃⌽⍵ ⋄ (¯2↓⍵),¯1↑⍵}¨s)
+         s
+     }
+     ⍺←()
+     ~N ⍺:⍺ textdraw.plot 0 A ⍵
+     st←'stack'≡⍺ ⎕VGET(⊂'barmode' 'group')
+     w←st A ⍵ ⋄ nl←⍺.⎕NL-2
+     ∧/'height' 'width'∊nl:⍺.(height width)textdraw.plot w
+     (⊂'height')∊nl:⍺.height textdraw.plot w
+     (⊂'width')∊nl:⍺.width textdraw.plot w
+     textdraw.plot w
+ }
