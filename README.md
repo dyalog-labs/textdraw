@@ -8,4 +8,4 @@
            /___/ e x t /______/ r a w
            \___\/      \______\/
 
-Documentation and examples: see [jupyter notebook](blob/main/textdraw.ipynb).
+Documentation and examples: see [jupyter notebook](textdraw.ipynb).
