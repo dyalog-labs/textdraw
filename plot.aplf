@@ -1,11 +1,19 @@
  plot←{
      N←{9.1=42 ⎕ATX'⍵'}
+     ⍺←() ⋄ n←N⊢a←⍺
      A←{
          2=≢⍴⍵:⍵
          ~(N ⍵)∨(1=≡⍵)∧∧/N¨⍵:⍵
          s←{
-             t←⍵ ⎕VGET(⊂'type' 'scatter')
-             (⊂'name')∊⍵.⎕NL-2:t ⍵.(name y x)
+             t←⊃∘⌽⍣(~n)⊢a ⎕VGET⍣n⊢(⊂'type' 'scatter')
+             t←⍵ ⎕VGET(⊂'type't)
+             (⊂'name')∊⍵.⎕NL-2:{
+                 'points'≡⍵ ⎕VGET(⊂'mode' 'lines'):t(⍵.(⊂name),↓⍉↑⍵.(y x))
+                 'points'≡a ⎕VGET⍣n⊢(⊂'mode' 'lines'):t(⍵.(⊂name),↓⍉↑⍵.(y x))
+                 t ⍵.(name y x)
+             }⍵
+             'points'≡⍵ ⎕VGET(⊂'mode' 'lines'):t(↓⍉↑⍵.(y x))
+             'points'≡a ⎕VGET⍣n⊢(⊂'mode' 'lines'):t(↓⍉↑⍵.(y x))
              t({0::⍵.y ⋄ ⍵.(y x)}⍵)
          }¨⍵
          1<≢t←∪⊃¨s:⎕SIGNAL 6 ⋄ t←⊃t ⋄ s←⊃∘⌽¨s
@@ -15,8 +23,7 @@
          1=≢y←∪¯2⊃⍤↑¨s:y,(⊂⍣⍺{2=≢⍵:⊃⌽⍵ ⋄ (¯2↓⍵),¯1↑⍵}¨s)
          s
      }
-     ⍺←()
-     ~N ⍺:⍺ textdraw.plot 0 A ⍵
+     ~n:⍺ textdraw.plot 0 A ⍵
      st←'stack'≡⍺ ⎕VGET(⊂'barmode' 'group')
      w←st A ⍵ ⋄ nl←⍺.⎕NL-2
      ∧/'height' 'width'∊nl:⍺.(height width)textdraw.plot w
