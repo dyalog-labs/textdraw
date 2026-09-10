@@ -138,6 +138,7 @@
     
     ⍝ ticks
     _ticks_←{t n←2↓⍵ ⋄ ⍺←⌊(n-1)÷t ⋄ ⍺⍺,⍨(n-1)⍴⍺⍺,(⍺-1)⍴⍵⍵}
+    ticks←{l h t←3↑⍵ ⋄ l+(t÷⍨h-l)×⎕IO-⍨⍳1+t}
     ⍝ rulers
     hruler←{⍺←⊢ ⋄ ⍺('|'_ticks_'''')⍵}
     vruler←{⍺←⊢ ⋄ ⍪⍺('—'_ticks_'-')⍵}
@@ -153,11 +154,11 @@
     }
     hlabel←{
         l h t n←⍵ ⋄ ⍺←⌊(n-1)÷t
-        triml⍉⍪⊃,/⍺ fmt l+(t÷⍨h-l)×⎕IO-⍨⍳1+t
+        triml⍉⍪⊃,/⍺ fmt ticks ⍵
     }
     vlabel←{
-        l h t n←⍵ ⋄ ∆←⌊(n-1)÷t ⋄ ⍺←∆
-        l←⍺ fmt l+(t÷⍨h-l)×⎕IO-⍨⍳1+t
+        l h t n←⍵ ⋄ ∆←⌊(n-1)÷t
+        ⍺←⊢ ⋄ l←⍺ fmt ticks ⍵
         triml⊖⊃⍪/⍉∘⍪¨(1-∆)↓,∆↑[1+⎕IO]⍪↓⌽↑⌽¨l
     }
     ⍝ 2D
