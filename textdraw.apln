@@ -240,14 +240,17 @@
         }¯1↓⍵)_ontop bg
         ⍺⍺≡0:p ⋄ stack⍪p(⊃,/w(⊣↑⊢↑⍨∘-∘⌊2÷⍨+∘≢)¨names)
     }
+    hdata←{⍺←⊢ ⋄ (≢⍤⊢⌸t⍸{⍵[⍋⍵]}⍵)(t←ticks ⍺ nice ⍵)}
     _histogram←{
         ⍺←50 ⋄ 2>≢⍺:(⍺,⍨⌊⍺×7÷16)∇ ⍵
+        (1=≡⍵)∧3=≢⍺:⍺∇(⊃1↓⍺)hdata ⍵ ⋄ 1=≡⍵:⍺∇hdata ⍵
         y x←⍵ ⋄ w←2×1⌈⌊(⊃⌽⍺)÷2×≢y
         sx←(⌊/,⌈/,∘(⊢,1+w×⊢)1-⍨≢)x
         sy←(⊃⍺)scale 0,y
         p←⊃,/' ',⍨¨(w-1)/¨⍪¨↓⍉sy vbar y
         p _ontop' '@(''''∘=)⍺⍺ _bg⊂sy sx
     }
+    histogram←{⍺←⊢ ⋄ y x←⍺ hdata ⍵ ⋄ w←1+⌈/≢⍤⍕¨x ⋄ 5(w×≢x)(7 _histogram)y x}
     _map←{p←⍺⍺ ⍵ ⋄ 0=⎕NC'⍺':p ⋄ ⍺←(⌊/,⌈/,1,≢)∘⍳¨⍴⍵ ⋄ ⍺(⊣label ruler)p}
     plot←{
         ⍺←⊢ ⋄ s←6+⎕IO ⋄ T←0=80|⎕DR∘∊ ⋄ L←{((≢⍵)↑⌽shades),' ',↑⍵}
