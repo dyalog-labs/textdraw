@@ -245,7 +245,7 @@
         p←⊃,/' ',⍨¨(w-1)/¨⍪¨↓⍉sy vbar y
         p _ontop' '@(''''∘=)⍺⍺ _bg⊂sy sx
     }
-    histogram←{⍺←⊢ ⋄ y x←⍺ hdata ⍵ ⋄ w←1+⌈/≢⍤⍕¨x ⋄ 5(w×≢x)(7 _histogram)y x}
+    histogram←{⍺←⊢ ⋄ 5(≢y)(1+(≢y)×1+⌈/≢¨fmt x)(7 _histogram)y x←⍺ hdata ⍵}
     _map←{p←⍺⍺ ⍵ ⋄ 0=⎕NC'⍺':p ⋄ ⍺←(⌊/,⌈/,1,≢)∘⍳¨⍴⍵ ⋄ ⍺(⊣label ruler)p}
     plot←{
         ⍺←⊢ ⋄ s←6+⎕IO ⋄ T←0=80|⎕DR∘∊ ⋄ L←{((≢⍵)↑⌽shades),' ',↑⍵}
