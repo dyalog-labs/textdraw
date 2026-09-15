@@ -236,7 +236,11 @@
         }¯1↓⍵)_ontop bg
         ⍺⍺≡0:p ⋄ stack⍪p(⊃,/w(⊣↑⊢↑⍨∘-∘⌊2÷⍨+∘≢)¨names)
     }
-    hdata←{⍺←⊢ ⋄ (¯1+≢⍤⊢⌸⎕IO⌈(⎕IO+2-⍨≢t)⌊t⍸(¯1↓t),⍵)(t←ticks ⍺ nice ⍵)}
+    hdata←{
+        ⍺←⊢ ⋄ a←1(-⍨⍣(3≠⊃⎕NC'⍺'))⍺
+        t←ticks{l h t←3↑⍵ ⋄ w←(h-l)÷t ⋄ l(h+w)(1+t)}a nice ⍵
+        (¯1+≢⍤⊢⌸⎕IO⌈(⎕IO+2-⍨≢t)⌊t⍸(¯1↓t),⍵)t
+    }
     _histogram←{
         ⍺←50 ⋄ 2>≢⍺:(⍺,⍨⌊⍺×7÷16)∇ ⍵
         (1=≡⍵)∧3=≢⍺:⍺∇(⊃1↓⍺)hdata ⍵ ⋄ 1=≡⍵:⍺∇hdata ⍵
@@ -246,7 +250,7 @@
         p←⊃,/' ',⍨¨(w-1)/¨⍪¨↓⍉sy vbar y
         p _ontop' '@(''''∘=)⍺⍺ _bg⊂sy sx
     }
-    histogram←{⍺←⊢ ⋄ 5(≢y)(1+(≢y)×1+⌈/≢¨fmt x)(7 _histogram)y x←⍺ hdata ⍵}
+    histogram←{⍺←⊢ ⋄ 5(≢y)(1+(≢y)×3⌈1+⌈/≢¨fmt x)(7 _histogram)y x←⍺ hdata ⍵}
     _map←{p←⍺⍺ ⍵ ⋄ 0=⎕NC'⍺':p ⋄ ⍺←(⌊/,⌈/,1,≢)∘⍳¨⍴⍵ ⋄ ⍺(⊣label ruler)p}
     plot←{
         ⍺←⊢ ⋄ s←6+⎕IO ⋄ T←0=80|⎕DR∘∊ ⋄ L←{((≢⍵)↑⌽shades),' ',↑⍵}
