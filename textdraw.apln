@@ -251,7 +251,11 @@
         p←⊃,/' ',⍨¨(w-1)/¨⍪¨↓⍉sy vbar y
         p _ontop' '@(''''∘=)⍺⍺ _bg⊂sy sx
     }
-    histogram←{⍺←⊢ ⋄ 5(≢y)(1+(≢y)×3⌈1+⌈/≢¨fmt x)(7 _histogram)y x←⍺ hdata ⍵}
+    histogram←{
+        ⍺←⊢ ⋄ 1≥≢⍺⊣⍬:5(≢y)(1+(≢y)×3⌈1+⌈/≢¨fmt x)(7 _histogram)y x←⍺ hdata ⍵
+        n w←¯2↑⍺ ⋄ 2=≢⍺:5(≢y)w(7 _histogram)y x←n hdata ⍵
+        (⊃⌽⍺)(≢y)w(7 _histogram)y x←n hdata ⍵
+    }
     _map←{p←⍺⍺ ⍵ ⋄ 0=⎕NC'⍺':p ⋄ ⍺←(⌊/,⌈/,1,≢)∘⍳¨⍴⍵ ⋄ ⍺(⊣label ruler)p}
     plot←{
         ⍺←⊢ ⋄ s←6+⎕IO ⋄ T←0=80|⎕DR∘∊ ⋄ L←{((≢⍵)↑⌽shades),' ',↑⍵}
