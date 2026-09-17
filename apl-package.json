@@ -18,9 +18,9 @@
   os_mac: 1,
   os_win: 1,
   project_url: "https://github.com/dyalog-labs/textdraw",
-  source: "./textdraw.apln",
+  source: "APLSource",
   tags: "text,output",
   tatin_version: "0.103.0",
   userCommandScript: "",
-  version: "0.1.0",
+  version: "0.1.1",
 }
