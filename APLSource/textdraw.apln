@@ -208,11 +208,12 @@
             ⍺≡7+⎕IO:stack⍪(¯1↓white ⍵)(hout s)(hlabel s)
             ⍺≡8+⎕IO:stack⍪(¯1↓grid ⍵)(hin s)(hlabel s)
         }⊂(1,(⊢,(⌈3÷⍨⊢),1+⊢)n)s
-        p←(shades{⍬≡⍺:'' ⋄ ⍺⍴⍵}{
+        p←(⍴bg)↑shades{⍬≡⍺:'' ⋄ ⍺⍴⍵}{
             (1=≢⍵)∧3>≡⍵:s hbar⊃⍵
             1=≢⍵:↑⊃(s∘scale¨⊃⍵),¨.(⍺⍺¨)(⍺⌊⍥≢⊃⍵)↑⌽⍺
             ↑,⊃(s∘scale¨⍵),.(⍪⍺⍺¨)(⍺⌊⍥≢⍵)↑⌽⍺
-        }1↓⍵)_at_(2⍴⎕IO)⊢bg
+        }1↓⍵
+        p←p _at_(0(s-⍨⍥(⊃⌽)⍴bg)+2⍴⎕IO)⊢bg
         ⍺⍺≡0:p
         n←⍕⍪(-⍤≢¨⌊⌿⍛(↑¨)⊢)⊃,/(r↑⊂)¨names
         ⍺⍺<0:stack n p
