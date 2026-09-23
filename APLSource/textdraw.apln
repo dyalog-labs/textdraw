@@ -15,8 +15,8 @@
     bars←bar0 bar1 bar2 bar3 bar4 bar5 bar6 bar7
 
     ⍝ box-plot boxes
-    box0←'├┤░│░├─┤∘' ⋄ box1←'├▓▓│▓▓─┤*' ⋄ box2←'├▐█│█▌─┤⍟' ⋄ box3←'░▓▓█▓▓░░*' ⋄ box4←'⊢█▓█▓█─⊣|'
-    box5←'-⎕⎕⌺⎕⎕--⋄' ⋄ box6←'├┼─┼─┼-┤|' ⋄ box7←'⊢[ | ]-⊣×' ⋄ box8←'─┬─○─┬──○' ⋄ box9←'(∘ ○ ∘ )∘'
+    box0←'├▐█│█▌─┤⍟' ⋄ box1←'├┤░│░├─┤∘' ⋄ box2←'├▓▓│▓▓─┤*' ⋄ box3←'░▓▓█▓▓░░*' ⋄ box4←'⊢█▓█▓█─⊣|'
+    box5←'-⎕⎕⌺⎕⎕--⋄' ⋄ box6←'├┼─┼─┼-┤|' ⋄ box7←'⊢[[|]]-⊣×' ⋄ box8←'─┬─○─┬──○' ⋄ box9←'∘○○⌽○○∘∘∘'
     boxes←box0 box1 box2 box3 box4 box5 box6 box7 box8 box9
     
     ⍝ block drawing
@@ -268,11 +268,10 @@
         ⍺←⊢ ⋄ 2|⎕DR ⍵⍵:⍺(⍺⍺∇∇(⍵⍵⊃boxes))⍵ ⋄ 0≠80|⎕DR∊⊃⍵:⍺∇(⊂''),⍵
         3>≡1↓⍵:⍺∇(1↑⍵),bdata¨1↓⍵
         names←⊃⍵ ⋄ s←⍺ scale∊1↓⍵ ⋄ n←≢1↓⍵
-        bg←(|⍺⍺)bg n s
-        p←⍕⍪(⊃⌽s)_box_⍵⍵⊢(⊂⍬)@(⎕IO+0 2)¨⍣(⍺⍺<0)⊢1↓⍵
-        p←p _at_(0(s-⍨⍥(⊃⌽)⍴bg)+⎕IO 0)⊢bg
-        ⍺⍺≡0:p
-        stack(↑,¨n⍴names)p
+        bg←(|⍺⍺)bg(1+2×n)s ⋄ ∆←0(s-⍨⍥(⊃⌽)⍴bg)+⎕IO
+        ps←(⊃⌽s)_box_⍵⍵⊢(⊂⍬)@(⎕IO+0 2)¨⍣(⍺⍺<0)⊢1↓⍵
+        p←⊃{(⍉⍪⍺⊃ps)_at_(∆+0,⍨1+2×⍺-⎕IO)⊢⍵}/(⍳≢ps),⊂bg
+        ⍺⍺≡0:p ⋄ stack(↑,¨(⊂''),⍨,''⊂⍛,⍪n⍴names)p
     }
     _boxes←{⍺←⊢ ⋄ ⍺(⍺⍺ _boxes_(⊃boxes))⍵}
     hdata←{
