@@ -1,33 +1,32 @@
- plot←{
-     N←{9.1=42 ⎕ATX'⍵'}
-     ⍺←() ⋄ n←N⊢a←⍺
-     A←{
-         2=≢⍴⍵:⍵
-         ~(N ⍵)∨(1=≡⍵)∧∧/N¨⍵:⍵
-         s←{
-             t←⊃∘⌽⍣(~n)⊢a ⎕VGET⍣n⊢(⊂'type' 'scatter')
-             'histogram'≡t←⍵ ⎕VGET(⊂'type't):t(⊂s)
-             (⊂'name')∊⍵.⎕NL-2:{
-                 'points'≡⍵ ⎕VGET(⊂'mode' 'lines'):t(⍵.(⊂name),↓⍉↑⍵.(y x))
-                 'points'≡a ⎕VGET⍣n⊢(⊂'mode' 'lines'):t(⍵.(⊂name),↓⍉↑⍵.(y x))
-                 t ⍵.(name y x)
-             }⍵
-             'points'≡⍵ ⎕VGET(⊂'mode' 'lines'):t(↓⍉↑⍵.(y x))
-             'points'≡a ⎕VGET⍣n⊢(⊂'mode' 'lines'):t(↓⍉↑⍵.(y x))
-             t({0::⍵.y ⋄ ⍵.(y x)}⍵)
-         }¨⍵
-         1<≢t←∪⊃¨s:⎕SIGNAL 6 ⋄ t←⊃t ⋄ s←⊃∘⌽¨s
-         ('bar'≡t)∧~0∊80|⎕DR¨s:⎕SIGNAL 11
-         1=≢s:⊃s
-         1=≢x←∪⊃∘⌽¨s:(⊂⍣⍺{⊃⍣(2=≢⍵)⊢¯1↓⍵}¨s),x
-         1=≢y←∪¯2⊃⍤↑¨s:y,(⊂⍣⍺{2=≢⍵:⊃⌽⍵ ⋄ (¯2↓⍵),¯1↑⍵}¨s)
-         s
-     }
-     ~n:⍺ textdraw.plot 0 A ⍵
-     st←'stack'≡⍺ ⎕VGET(⊂'barmode' 'group')
-     w←st A ⍵ ⋄ nl←⍺.⎕NL-2
-     ∧/'height' 'width'∊nl:⍺.(height width)textdraw.plot w
-     (⊂'height')∊nl:⍺.height textdraw.plot w
-     (⊂'width')∊nl:⍺.width textdraw.plot w
-     textdraw.plot w
- }
+plot←{
+    N←{9.1=42 ⎕ATX'⍵'}
+    A←{
+        2=≢⍴⍵:⍵
+        ~(N ⍵)∨(1=≡⍵)∧∧/N¨⍵:⍵
+        n←(⊂'name')∊⊃,/⍵.⎕NL-2
+        s←{
+            'histogram'≡t←⍵ ⎕VGET(⊂'type' 'scatter'):t ⍵.x
+            ('box'≡t)∧n:t((⍵ ⎕VGET⊂'name' '')(⊂⍵ ⎕VGET⊂(,'x')(⍵ ⎕VGET⊂(,'y')⍬)))
+            'box'≡t:t(⊂⍵ ⎕VGET⊂(,'x')(⍵ ⎕VGET⊂(,'y')⍬))
+            l←(⊂'false')≢⍵ ⎕VGET(⊂'showlegend'(⊂'true'))
+            n:t((⊂⍵ ⎕VGET⊂'name' ''),⍵.(y x))
+            t({0::⍵.y ⋄ ⍵.(y x)}⍵)
+        }¨⍵
+        1<≢t←∪⊃¨s:⎕SIGNAL 6 ⋄ t←⊃t ⋄ s←⊃∘⌽¨s
+        t≡'histogram':s
+        (t≡'box')∧0∊80|⎕DR¨∊s:(⊂⊃¨s),⊃∘⌽¨s ⋄ t≡'box':s
+        ('bar'≡t)∧~0∊80|⎕DR¨s:⎕SIGNAL 11
+        1=≢s:⊃s
+        1=≢x←∪⊃∘⌽¨s:(⊂⍣⍺{⊃⍣(2=≢⍵)⊢¯1↓⍵}¨s),x
+        1=≢y←∪¯2⊃⍤↑¨s:y,(⊂⍣⍺{2=≢⍵:⊃⌽⍵ ⋄ (¯2↓⍵),¯1↑⍵}¨s)
+        s
+    }
+    ⍺←() ⋄ draw←textdraw
+    ~N ⍺:⍺ draw.plot 0 A ⍵
+    0≠⍺.⎕NC'type':a∇⍵ ⎕VSET¨⊂⊂'type'(⍺.type)⊣a.⎕EX'type'⊣a←⎕NS ⍺
+    w←('stack'≡⍺ ⎕VGET⊂'barmode' 'group')A ⍵ ⋄ nl←⍺.⎕NL-2
+    ∧/'height' 'width'∊nl:⍺.(height width)draw.plot w
+    (⊂'height')∊nl:⍺.height draw.plot w
+    (⊂'width')∊nl:⍺.width draw.plot w
+    draw.plot w
+}
