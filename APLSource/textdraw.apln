@@ -9,14 +9,15 @@
     
     ⍝ fillings
     hlevels←' ▏▎▍▌▋▊▉█' ⋄ vlevels←' ▁▂▃▄▅▆▇█' ⋄ shades←' ░▓█' ⋄ shades1←' ·░▒▓█'
-    
+    ascii←' .:-+=*%#@' ⋄ braille1←' ⠠⠢⠴⠶⠷⡾⣻⣿'
+
     ⍝ bars
     bar0←' ⎕' ⋄ bar1←' █' ⋄ bar2←' ▆' ⋄ bar3←'░▓' ⋄ bar4←'○⍟' ⋄ bar5←'·|' ⋄ bar6←'⎕⌺' ⋄ bar7←'─┼'
     bars←bar0 bar1 bar2 bar3 bar4 bar5 bar6 bar7
 
     ⍝ box-plot boxes
-    box0←'├▐█│█▌─┤⍟' ⋄ box1←'├┤░│░├─┤∘' ⋄ box2←'├▓▓│▓▓─┤*' ⋄ box3←'░▓▓█▓▓░░*' ⋄ box4←'⊢█▓█▓█─⊣|'
-    box5←'-⎕⎕⌺⎕⎕--⋄' ⋄ box6←'├┼─┼─┼-┤|' ⋄ box7←'⊢[[|]]-⊣×' ⋄ box8←'─┬─○─┬──○' ⋄ box9←'∘○○⌽○○∘∘∘'
+    box0←'├▐█│█▌─┤∘' ⋄ box1←'├┤░│░├─┤∘' ⋄ box2←'├▓▓│▓▓─┤*' ⋄ box3←'░▓▓█▓▓░░*' ⋄ box4←'⊢█▓█▓█─⊣⍟'
+    box5←'-⎕⎕⌺⎕⎕--⋄' ⋄ box6←'├┼─┼─┼-┤|' ⋄ box7←'⊢[─⌷─]-⊣+' ⋄ box8←'─┬─○─┬──○' ⋄ box9←'∘○○⌽○○∘∘∘'
     boxes←box0 box1 box2 box3 box4 box5 box6 box7 box8 box9
     
     ⍝ block drawing
