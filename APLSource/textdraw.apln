@@ -189,6 +189,15 @@
     ruler←{stack[(vruler⊃⍺ ⋄ ⍵) ⋄ (' ' ⋄ hruler⊃⌽⍺)]}
     label←{stack[(vlabel⊃⍺ ⋄ ⍵) ⋄ (' ' ⋄ hlabel⊃⌽⍺)]}
 
+    ⍝ spark lines
+    spark←{
+        2<r←≢⍴⍵:⎕SIGNAL 4
+        (0=⎕NC'⍺')∧(2=r)∧⊃0∧.=80|⎕DR¨h←,1↑⍵:h∇1↓⍵
+        ⍺←⊢ ⋄ 2=r:⍺∇↓⍉⍵
+        l←⍕⍪vlevel¨@(0≠80|⎕DR∘∊¨)(⊃⍤⌽∘⎕A¨1-⍨∪⍳⊢)¨@(0=80|⎕DR∘∊¨)⊆⍵
+        0∊⍴⍺⊣⍬:l ⋄ ⍕(⌽↑⌽¨⍺)l
+    }
+
     ⍝ plotting
     _bg←{
         ⍺←⊢ ⋄ 3>≡⍵:∇⊂⍺ scale ⍵
@@ -312,6 +321,7 @@
     _map←{p←⍺⍺ ⍵ ⋄ 0=⎕NC'⍺':p ⋄ ⍺←(⌊/,⌈/,1,≢)∘⍳¨⍴⍵ ⋄ ⍺(⊣label ruler)p}
     plot←{
         ⍺←⊢ ⋄ s←6+⎕IO ⋄ T←0=80|⎕DR∘∊ ⋄ L←{((≢⍵)↑⌽shades),' ',↑⍵}
+        (2=≢⍴⍵)∧0=80|⎕DR∊1↑⍵:⍺ spark ⍵
         2=≢⍴⍵:⍺ shade1 _map ⍵
         (2=≡⍵)∧0=≢⍴⍵:⍺ histogram⊃⍵
         (1=≡⍵~⊂⍬)∧2>≢⍴⍵:⍺(s _series)⍵
