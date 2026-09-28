@@ -9,7 +9,7 @@
     
     ⍝ fillings
     hlevels←' ▏▎▍▌▋▊▉█' ⋄ vlevels←' ▁▂▃▄▅▆▇█' ⋄ shades←' ░▓█' ⋄ shades1←' ·░▒▓█'
-    ascii←' .:-+=*%#@' ⋄ braille1←' ⠠⠢⠴⠶⠷⡾⣻⣿'
+    ascii←' .:-+=*%#@' ⋄ apl←' .,-×∘⋄⊆⍉@⌸⌹' ⋄ braille1←' ⠠⠢⠴⠶⠷⡾⣻⣿'
 
     ⍝ bars
     bar0←' ⎕' ⋄ bar1←' █' ⋄ bar2←' ▆' ⋄ bar3←'░▓' ⋄ bar4←'○⍟' ⋄ bar5←'·|' ⋄ bar6←'⎕⌺' ⋄ bar7←'─┼'
@@ -402,8 +402,11 @@
         ((⌊/,⌈/)⍤∊⍵⍵ _fill⊢)+/∘∊¨(|(d×2)d)tesselate g
     }
     block←blocks _block_ shades
+    vblock←hlevels _block_ hlevels
+    hblock←vlevels _block_ vlevels
     shaded←shades _block_ shades
     asciiart←ascii _block_ ascii
+    aplart←apl _block_ apl
     zoom←{
         ⍺←2 ⋄ 1=⍺:⍵ ⋄ 0>⍺:(|⍺)∇⌽⍵
         u d←60{(⊢÷∨/)(⌊0.5+⍵×⍺)⍺}⍺ ⋄ g←u{⍺⌿⍺/⍵}⍣(u>1)⊢⍵ ⋄ 1=d:g
