@@ -296,39 +296,27 @@
     }
     _boxes←{⍺←⊢ ⋄ ⍺(⍺⍺ _boxes_(⊃boxes))⍵}
     hdata←{
-        ⍺←⊢ ⋄ a←1(-⍨⍣(1=≢⍺⊣⍬))⍺
-        T←ticks⊢{l h t←3↑⍵ ⋄ w←(h-l)÷t ⋄ m←h∊⍺ ⋄ l(h+w×m)(t+m)}nice
-        1<≡⍵:(a T⊃,/⍵)∘∇¨⍵ ⋄ 1=≢⍺⊣0:⍵∇⍨a T ⍵
-        (¯1+≢⍤⊢⌸⎕IO⌈(⎕IO+2-⍨≢⍺)⌊⍺⍸(¯1↓⍺),⍵)⍺
+        ⍺←30
+        2=≢⍴⍵:(⊃⌽⍺ scale ⍵)∇¨⍤1⊢⍵ 
+        0=≢⍴⍺:(⍺ scale ⍵)∇⍵ ⋄ l h n w←⍺
+        n←¯1+≢t←ticks l h(n×1+6≤(w-1)÷n)w
+        y←(¯1+≢⍤⊢)⌸(⍳n),1⌈n⌊t⍸⍵ ⋄ y t
     }
     _histogram←{
-        ⍝ ⍺: [width] [height width] [height maxy width]
-        ⍺←50 ⋄ 1=≢⍺:(⍺,⍨⌊⍺×7÷24)∇⍵
-        y x←hdata⍣(1=≡⍵)⊢⍵ ⋄ w←2⌈⌊(⊃⌽⍺)÷≢y
-        sx←(⌊/,⌈/,∘(⊢,1+w×⊢)1-⍨≢)x
-        sy←(⊃⍺)scale 0,(⌈/y)⊣⍣(3>≢⍺)⊃1↓⍺
-        p←⊃,/' ',⍨¨(w-1)/¨⍪¨↓⍉sy vbar y
+        ⍺←30 ⋄ 1=≢⍺:(⍺,⍨3+⌊(⊃⌽⊃⍺)÷15)∇⍵
+        2>≡⍵:(⊃⍺)sx∇sx hdata ⍵⊣sx←⍵ scale⍨⍣(0=≢⍴⊃⌽⍺)⊃⌽⍺
+        (2=≡⍵)∧2=≢⍴⍵:⍵∇¨⍨⍺{
+            sx←⊃⌽⍺ scale ⍵
+            sy←⊃(⊃⍺)scale sx hdata¨⍤1⊢⍵
+            sy∘.(,⍥⊂)sx
+        }⍵
+        w←2⌈⌊(⊃⌽⊃⌽⍺)÷≢⊃⍵
+        sx←(⊃⌽⍵)(⌊/,⌈/,∘(⊢,1+w×⊢)1-⍨≢)⍤⊣⍣(0=≢⍴⊃⌽⍺)⊃⌽⍺
+        sy←(⊃⍵)scale⍨⍣(0=≢⍴⊃⍺)⊃⍺
+        p←⊃,/' ',⍨¨(¯1+(¯1+⊃⌽sx)÷≢⊃⍵)/¨⍪¨↓⍉sy vbar⊃⍵
         p _ontop' '@(''''∘=)⍺⍺ _bg⊂sy sx
     }
-    histogram←{
-        ⍝ ⍺: [nbins] [nbins width] [height nbins width]
-        h←5 ⋄ W←{y x←⍵ ⋄ 1+(≢y)×3⌈1+⌈/≢¨fmt x}
-        (1<≡⍵)∧0=⎕NC'⍺':{
-            yx←⍉hdata⍤1⍉⍵ ⋄ m←⌈/(⌈/⊃)¨yx ⋄ w←⌈⌿W¨yx
-            (h,¨m∘.,w)(7 _histogram)¨yx
-        }⍵
-        1<≡⍵:⍺{
-            2=≢⍺:(h,⍺)∇⍵
-            yx←⍉(⊃1↓⍣(3=≢⍺)⊢⍺)hdata⍤0 1⍉⍵ ⋄ m←⌈/(⌈/⊃)¨yx
-            w←(⊃⌽⍺)⊣⍣(3=≢⍺)⌈⌿W¨yx
-            a←(h⊣⍣(3>≢⍺)⊃⍺),¨⍤0 1⊢((⊃⍴⍵)⍴m),¨⍤0 1⊢(⊃1↓1,⍨⍴⍵)⍴w
-            a(7 _histogram)¨yx
-        }⍵
-        0=⎕NC'⍺':h w(7 _histogram)yx⊣w←W⊢yx←hdata ⍵
-        w←W⊢yx←(⊃1↓⍣(3=≢⍺)⊢⍺)hdata ⍵
-        1=≢⍺:(h,w)(7 _histogram)yx
-        ((⊃,⊃∘⌽)⍺)(7 _histogram)yx
-    }
+    histogram←7 _histogram
     _map←{p←⍺⍺ ⍵ ⋄ 0=⎕NC'⍺':p ⋄ ⍺←(⌊/,⌈/,1,≢)∘⍳¨⍴⍵ ⋄ ⍺(⊣label ruler)p}
     plot←{
         ⍺←⊢ ⋄ s←6+⎕IO ⋄ T←0=80|⎕DR∘∊ ⋄ L←{((≢⍵)↑⌽shades),' ',↑⍵}
