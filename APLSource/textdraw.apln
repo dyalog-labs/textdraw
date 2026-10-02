@@ -415,7 +415,7 @@
     }
     dotted←{
         ⍺←1 ⋄ v←¯2(↑,⍨∘,∘⍉2 3⍴↓)2*⎕IO-⍨⍳8
-        braille[⎕IO+(v+.×,)¨(2÷⍨⌈/+⌊/)∘,⍛<4 2 tesselate ⍺ zoom bitmap ⍵]
+        braille[⎕IO+(v+.×,)¨4 2 tesselate 0.5≤⍺ zoom brightness ⍵]
     }
     dotted1←braille1 _block_ braille1
 
