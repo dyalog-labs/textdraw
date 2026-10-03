@@ -5,7 +5,7 @@
     
     ⍝ markers
     marker0←'*×+-' ⋄ marker1←'∘○⍟⊖' ⋄ marker3←'∆∇⍙' ⋄ marker4←'⎕⍞⍠⌹⌸⌺⌷'
-    marker←marker0,marker1,marker3,marker4,(diamond←'⋄'),dot←'·'
+    marker←(diamond←'⋄'),marker0,marker1,marker3,marker4,dot←'·'
     
     ⍝ fillings
     hlevels←' ▏▎▍▌▋▊▉█' ⋄ vlevels←' ▁▂▃▄▅▆▇█' ⋄ shades←' ░▓█' ⋄ shades1←' ·░▒▓█'
